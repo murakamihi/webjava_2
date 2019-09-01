@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import jp.co.systena.tigerscave.rpgapplication.model.BaseJob;
+import jp.co.systena.tigerscave.rpgapplication.model.MartialArtist;
 import jp.co.systena.tigerscave.rpgapplication.model.ResultForm;
 import jp.co.systena.tigerscave.rpgapplication.model.Warrior;
 import jp.co.systena.tigerscave.rpgapplication.model.Witch;
@@ -21,10 +22,14 @@ public class ResultController {
   public ModelAndView show(ModelAndView mav) {
 
     // 戦士取得
-    BaseJob baseJob = (Warrior) session.getAttribute(BaseJob.Warrior);
+    BaseJob baseJob = (Warrior) session.getAttribute(BaseJob.WARRIOR);
     if (baseJob == null) {
       // 魔法使い取得
-      baseJob = (Witch) session.getAttribute(BaseJob.Witch);
+      baseJob = (Witch) session.getAttribute(BaseJob.WITCH);
+    }
+    if (baseJob == null) {
+      // 武闘家取得
+      baseJob = (MartialArtist) session.getAttribute(BaseJob.MARTIAL_ARTIST);
     }
 
     ResultForm resultForm = new ResultForm(baseJob.fight());

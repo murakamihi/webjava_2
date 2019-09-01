@@ -6,7 +6,7 @@ public class CharacterMakeForm {
 
   public CharacterMakeForm() {
     // 初期値は戦士とする
-    job = BaseJob.Warrior;
+    job = BaseJob.WARRIOR;
   }
 
   public void setJob(String job) {

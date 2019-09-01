@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import jp.co.systena.tigerscave.rpgapplication.model.BaseJob;
 import jp.co.systena.tigerscave.rpgapplication.model.CharacterMakeForm;
+import jp.co.systena.tigerscave.rpgapplication.model.MartialArtist;
 import jp.co.systena.tigerscave.rpgapplication.model.Warrior;
 import jp.co.systena.tigerscave.rpgapplication.model.Witch;
 
@@ -23,18 +24,26 @@ public class CommandController {
     CharacterMakeForm characterDispData = new CharacterMakeForm();
 
     //戦士表示
-    Warrior warrior = (Warrior) session.getAttribute(BaseJob.Warrior);
+    Warrior warrior = (Warrior) session.getAttribute(BaseJob.WARRIOR);
     if (warrior != null) {
       characterDispData.setName(warrior.getName());
-      characterDispData.setJob(BaseJob.Warrior);
+      characterDispData.setJob(BaseJob.WARRIOR);
     }
 
     //魔法使い表示
-    Witch witch = (Witch) session.getAttribute(BaseJob.Witch);
+    Witch witch = (Witch) session.getAttribute(BaseJob.WITCH);
     if (witch != null) {
       characterDispData.setName(witch.getName());
-      characterDispData.setJob(BaseJob.Witch);
+      characterDispData.setJob(BaseJob.WITCH);
     }
+
+    //武闘家表示
+    MartialArtist martialArtist = (MartialArtist) session.getAttribute(BaseJob.MARTIAL_ARTIST);
+    if (martialArtist != null) {
+      characterDispData.setName(martialArtist.getName());
+      characterDispData.setJob(BaseJob.MARTIAL_ARTIST);
+    }
+
 
     mav.addObject("character", characterDispData);
 
@@ -50,15 +59,23 @@ public class CommandController {
 
     // 職業に応じてキャラクターをセッションに保存
     switch (job) {
-      case BaseJob.Warrior:
+      case BaseJob.WARRIOR:
         Warrior warrior = new Warrior(name);
-        session.setAttribute(BaseJob.Warrior, warrior);
-        session.removeAttribute(BaseJob.Witch);
+        session.setAttribute(BaseJob.WARRIOR, warrior);
+        session.removeAttribute(BaseJob.WITCH);
+        session.removeAttribute(BaseJob.MARTIAL_ARTIST);
         break;
-      case BaseJob.Witch:
+      case BaseJob.WITCH:
         Witch witch = new Witch(name);
-        session.setAttribute(BaseJob.Witch, witch);
-        session.removeAttribute(BaseJob.Warrior);
+        session.setAttribute(BaseJob.WITCH, witch);
+        session.removeAttribute(BaseJob.WARRIOR);
+        session.removeAttribute(BaseJob.MARTIAL_ARTIST);
+        break;
+      case BaseJob.MARTIAL_ARTIST:
+        MartialArtist martialArtist = new MartialArtist(name);
+        session.setAttribute(BaseJob.MARTIAL_ARTIST, martialArtist);
+        session.removeAttribute(BaseJob.WARRIOR);
+        session.removeAttribute(BaseJob.WITCH);
         break;
     }
 
