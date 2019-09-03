@@ -21,6 +21,56 @@ public class ResultController {
   @RequestMapping(value = "/result", method = RequestMethod.GET)
   public ModelAndView show(ModelAndView mav) {
 
+    BaseJob baseJob = getJob();
+
+    ResultForm resultForm = new ResultForm();
+    if (baseJob.getAction().equals(BaseJob.FIGHT)) {
+      // たかかう選択
+      resultForm.setResultString(baseJob.fight());
+    } else {
+      // かいふく選択
+      resultForm.setResultString(baseJob.recovery());
+    }
+    mav.addObject("result", resultForm);
+
+    mav.setViewName("Result");
+
+    return mav;
+  }
+
+  @RequestMapping(value = "/result", params = "fight", method = RequestMethod.POST)
+  public ModelAndView commandFight(ModelAndView mav) {
+
+    BaseJob baseJob = getJob();
+    baseJob.setAction(BaseJob.FIGHT);
+    if (baseJob instanceof Warrior) {
+      session.setAttribute(BaseJob.WARRIOR, baseJob);
+    } else if (baseJob instanceof Witch) {
+      session.setAttribute(BaseJob.WITCH, baseJob);
+    } else {
+      session.setAttribute(BaseJob.MARTIAL_ARTIST, baseJob);
+    }
+
+    return new ModelAndView("redirect:/result"); // リダイレクト
+  }
+
+  @RequestMapping(value = "/result", params = "recovery", method = RequestMethod.POST)
+  public ModelAndView commandRecovery(ModelAndView mav) {
+
+    BaseJob baseJob = getJob();
+    baseJob.setAction(BaseJob.RECOVERY);
+    if (baseJob instanceof Warrior) {
+      session.setAttribute(BaseJob.WARRIOR, baseJob);
+    } else if (baseJob instanceof Witch) {
+      session.setAttribute(BaseJob.WITCH, baseJob);
+    } else {
+      session.setAttribute(BaseJob.MARTIAL_ARTIST, baseJob);
+    }
+
+    return new ModelAndView("redirect:/result"); // リダイレクト
+  }
+
+  private BaseJob getJob() {
     // 戦士取得
     BaseJob baseJob = (Warrior) session.getAttribute(BaseJob.WARRIOR);
     if (baseJob == null) {
@@ -32,18 +82,7 @@ public class ResultController {
       baseJob = (MartialArtist) session.getAttribute(BaseJob.MARTIAL_ARTIST);
     }
 
-    ResultForm resultForm = new ResultForm(baseJob.fight());
-    mav.addObject("result", resultForm);
-
-    mav.setViewName("Result");
-
-    return mav;
-  }
-
-  @RequestMapping(value = "/result", method = RequestMethod.POST)
-  public ModelAndView makedCharacter(ModelAndView mav) {
-
-    return new ModelAndView("redirect:/result"); // リダイレクト
+    return baseJob;
   }
 
 }

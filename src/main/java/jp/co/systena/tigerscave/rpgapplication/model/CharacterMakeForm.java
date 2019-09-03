@@ -3,6 +3,7 @@ package jp.co.systena.tigerscave.rpgapplication.model;
 public class CharacterMakeForm {
   String job;
   String name;
+  String action;
 
   public CharacterMakeForm() {
     // 初期値は戦士とする
@@ -23,5 +24,13 @@ public class CharacterMakeForm {
 
   public String getName() {
     return name;
+  }
+
+  public void setAction(String action) {
+    this.action = action;
+  }
+
+  public String getAction() {
+    return action;
   }
 }

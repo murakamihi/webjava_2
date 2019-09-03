@@ -23,21 +23,21 @@ public class CommandController {
 
     CharacterMakeForm characterDispData = new CharacterMakeForm();
 
-    //戦士表示
+    // 戦士表示
     Warrior warrior = (Warrior) session.getAttribute(BaseJob.WARRIOR);
     if (warrior != null) {
       characterDispData.setName(warrior.getName());
       characterDispData.setJob(BaseJob.WARRIOR);
     }
 
-    //魔法使い表示
+    // 魔法使い表示
     Witch witch = (Witch) session.getAttribute(BaseJob.WITCH);
     if (witch != null) {
       characterDispData.setName(witch.getName());
       characterDispData.setJob(BaseJob.WITCH);
     }
 
-    //武闘家表示
+    // 武闘家表示
     MartialArtist martialArtist = (MartialArtist) session.getAttribute(BaseJob.MARTIAL_ARTIST);
     if (martialArtist != null) {
       characterDispData.setName(martialArtist.getName());
@@ -56,23 +56,24 @@ public class CommandController {
   public ModelAndView makedCharacter(ModelAndView mav, CharacterMakeForm characterInput) {
     String name = characterInput.getName();
     String job = characterInput.getJob();
+    String action = characterInput.getAction();
 
     // 職業に応じてキャラクターをセッションに保存
     switch (job) {
       case BaseJob.WARRIOR:
-        Warrior warrior = new Warrior(name);
+        Warrior warrior = new Warrior(name, action);
         session.setAttribute(BaseJob.WARRIOR, warrior);
         session.removeAttribute(BaseJob.WITCH);
         session.removeAttribute(BaseJob.MARTIAL_ARTIST);
         break;
       case BaseJob.WITCH:
-        Witch witch = new Witch(name);
+        Witch witch = new Witch(name, action);
         session.setAttribute(BaseJob.WITCH, witch);
         session.removeAttribute(BaseJob.WARRIOR);
         session.removeAttribute(BaseJob.MARTIAL_ARTIST);
         break;
       case BaseJob.MARTIAL_ARTIST:
-        MartialArtist martialArtist = new MartialArtist(name);
+        MartialArtist martialArtist = new MartialArtist(name, action);
         session.setAttribute(BaseJob.MARTIAL_ARTIST, martialArtist);
         session.removeAttribute(BaseJob.WARRIOR);
         session.removeAttribute(BaseJob.WITCH);
