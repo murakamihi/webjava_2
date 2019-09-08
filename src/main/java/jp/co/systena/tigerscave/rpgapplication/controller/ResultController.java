@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import jp.co.systena.tigerscave.rpgapplication.model.BaseJob;
+import jp.co.systena.tigerscave.rpgapplication.model.Enemy;
 import jp.co.systena.tigerscave.rpgapplication.model.Party;
 import jp.co.systena.tigerscave.rpgapplication.model.ResultForm;
 
@@ -22,17 +23,20 @@ public class ResultController {
     Party party = (Party) session.getAttribute(Party.PARTY_SESSION_KEY);
     List<Object> partyMember = party.getPartyMember();
     ResultForm resultForm = new ResultForm();
+    Enemy enemy = new Enemy();
     for (Object member : partyMember) {
       BaseJob baseJob = (BaseJob) member;
       if (baseJob.getAction().equals(BaseJob.FIGHT)) {
         // たかかう選択
         resultForm.addResult(baseJob.fight());
+        enemy.damage();
       } else {
         // かいふく選択
         resultForm.addResult(baseJob.recovery());
       }
     }
     mav.addObject("result", resultForm);
+    mav.addObject("enemy", enemy);
 
     mav.setViewName("Result");
 
@@ -53,7 +57,7 @@ public class ResultController {
 
     session.setAttribute(Party.PARTY_SESSION_KEY, party);
 
-  //パーティー人数分表示されたら結果画面へ遷移
+    // パーティー人数分表示されたら結果画面へ遷移
     if (party.getNumberOfPeople() > dispNumber + 1) {
       party.addDispNumber();
       return new ModelAndView("redirect:/command");
@@ -73,7 +77,7 @@ public class ResultController {
 
     session.setAttribute(Party.PARTY_SESSION_KEY, party);
 
-    //パーティー人数分表示されたら結果画面へ遷移
+    // パーティー人数分表示されたら結果画面へ遷移
     if (party.getNumberOfPeople() > dispNumber + 1) {
       party.addDispNumber();
       return new ModelAndView("redirect:/command");
