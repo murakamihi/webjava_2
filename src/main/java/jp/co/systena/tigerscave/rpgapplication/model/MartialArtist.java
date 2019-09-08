@@ -18,7 +18,15 @@ public class MartialArtist extends BaseJob {
   public String fight() {
     StringBuilder builder = new StringBuilder();
     builder.append(name);
-    builder.append("は拳で攻撃した！");
+    builder.append("は拳で攻撃した！　HP：-10");
+
+    return builder.toString();
+  }
+
+  public String strongFight() {
+    StringBuilder builder = new StringBuilder();
+    builder.append(name);
+    builder.append("は拳で強攻撃した！　HP：-20");
 
     return builder.toString();
   }

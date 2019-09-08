@@ -18,7 +18,15 @@ public class Witch extends BaseJob {
   public String fight() {
     StringBuilder builder = new StringBuilder();
     builder.append(name);
-    builder.append("はまほうで攻撃した！");
+    builder.append("はまほうで攻撃した！　HP：-10");
+
+    return builder.toString();
+  }
+
+  public String strongFight() {
+    StringBuilder builder = new StringBuilder();
+    builder.append(name);
+    builder.append("はまほうで強攻撃した！　HP：-20");
 
     return builder.toString();
   }

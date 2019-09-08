@@ -32,8 +32,13 @@ public class ResultController {
       BaseJob baseJob = (BaseJob) member;
       if (baseJob.getAction().equals(BaseJob.FIGHT)) {
         // たかかう選択
-        resultForm.addResult(baseJob.fight());
-        enemy.damage();
+        if (Math.random() > 0.8) {
+          resultForm.addResult(baseJob.strongFight());
+          enemy.strongDamage();
+        } else {
+          resultForm.addResult(baseJob.fight());
+          enemy.damage();
+        }
       } else {
         // かいふく選択
         resultForm.addResult(baseJob.recovery());

@@ -28,6 +28,6 @@ public abstract class BaseJob {
   }
 
   public abstract String fight();
-
+  public abstract String strongFight();
   public abstract String recovery();
 }
