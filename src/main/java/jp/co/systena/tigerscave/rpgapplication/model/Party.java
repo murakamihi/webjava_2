@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Party {
   public static final String PARTY_SESSION_KEY = "PARTY_SESSION_KEY";
-  public static final int MAX_MEMBER = 2;
+  public static final int MAX_MEMBER = 4;
 
   List<Object> partyMember;
   int numberOfPeople;
