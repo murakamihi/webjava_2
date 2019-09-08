@@ -23,7 +23,11 @@ public class ResultController {
     Party party = (Party) session.getAttribute(Party.PARTY_SESSION_KEY);
     List<Object> partyMember = party.getPartyMember();
     ResultForm resultForm = new ResultForm();
-    Enemy enemy = new Enemy();
+
+    Enemy enemy = (Enemy) session.getAttribute(Enemy.ENEMY_KEY);
+    if (enemy == null) {
+      enemy = new Enemy();
+    }
     for (Object member : partyMember) {
       BaseJob baseJob = (BaseJob) member;
       if (baseJob.getAction().equals(BaseJob.FIGHT)) {
@@ -38,9 +42,12 @@ public class ResultController {
     mav.addObject("result", resultForm);
     mav.addObject("enemy", enemy);
 
+    session.setAttribute(Enemy.ENEMY_KEY, enemy);
+    party.resetDispNumber();
+
     mav.setViewName("Result");
 
-    session.removeAttribute(Party.PARTY_SESSION_KEY);
+    // session.removeAttribute(Party.PARTY_SESSION_KEY);
 
     return mav;
   }

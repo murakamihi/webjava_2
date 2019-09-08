@@ -56,4 +56,10 @@ public class CommandController {
 
     session.setAttribute(Party.PARTY_SESSION_KEY, party);
   }
+
+  @RequestMapping(value = "/command", params = "redirectCommand", method = RequestMethod.POST)
+  public ModelAndView redirectCommand(ModelAndView mav, CharacterMakeForm characterInput) {
+
+    return new ModelAndView("redirect:/command"); // リダイレクト
+  }
 }

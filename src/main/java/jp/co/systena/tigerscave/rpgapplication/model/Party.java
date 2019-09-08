@@ -84,4 +84,8 @@ public class Party {
       dispData.isDisplayContinued = false;
     }
   }
+
+  public void resetDispNumber() {
+    dispNumber = 0;
+  }
 }
