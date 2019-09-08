@@ -1,21 +1,24 @@
 package jp.co.systena.tigerscave.rpgapplication.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResultForm {
-  String resultString;
+  List<String> resultList;
 
   public ResultForm() {
-
+    resultList = new ArrayList<String>();
   }
 
-  public ResultForm(String resultString) {
-    this.resultString = resultString;
+  public void setResultList(List<String> resultList) {
+    this.resultList = resultList;
   }
 
-  public void setResultString(String resultString) {
-    this.resultString = resultString;
+  public List<String> getResultList() {
+    return resultList;
   }
 
-  public String getResultString() {
-    return resultString;
+  public void addResult(String result) {
+    resultList.add(result);
   }
 }

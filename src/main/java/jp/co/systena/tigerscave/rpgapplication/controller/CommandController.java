@@ -6,11 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import jp.co.systena.tigerscave.rpgapplication.model.BaseJob;
 import jp.co.systena.tigerscave.rpgapplication.model.CharacterMakeForm;
-import jp.co.systena.tigerscave.rpgapplication.model.MartialArtist;
-import jp.co.systena.tigerscave.rpgapplication.model.Warrior;
-import jp.co.systena.tigerscave.rpgapplication.model.Witch;
+import jp.co.systena.tigerscave.rpgapplication.model.Party;
 
 @Controller
 public class CommandController {
@@ -22,28 +19,9 @@ public class CommandController {
   public ModelAndView show(ModelAndView mav) {
 
     CharacterMakeForm characterDispData = new CharacterMakeForm();
+    Party party = (Party) session.getAttribute(Party.PARTY_SESSION_KEY);
 
-    // 戦士表示
-    Warrior warrior = (Warrior) session.getAttribute(BaseJob.WARRIOR);
-    if (warrior != null) {
-      characterDispData.setName(warrior.getName());
-      characterDispData.setJob(BaseJob.WARRIOR);
-    }
-
-    // 魔法使い表示
-    Witch witch = (Witch) session.getAttribute(BaseJob.WITCH);
-    if (witch != null) {
-      characterDispData.setName(witch.getName());
-      characterDispData.setJob(BaseJob.WITCH);
-    }
-
-    // 武闘家表示
-    MartialArtist martialArtist = (MartialArtist) session.getAttribute(BaseJob.MARTIAL_ARTIST);
-    if (martialArtist != null) {
-      characterDispData.setName(martialArtist.getName());
-      characterDispData.setJob(BaseJob.MARTIAL_ARTIST);
-    }
-
+    characterDispData = party.setDispData(characterDispData);
 
     mav.addObject("character", characterDispData);
 
@@ -52,35 +30,30 @@ public class CommandController {
     return mav;
   }
 
-  @RequestMapping(value = "/command", method = RequestMethod.POST)
+  @RequestMapping(value = "/command", params = "next", method = RequestMethod.POST)
   public ModelAndView makedCharacter(ModelAndView mav, CharacterMakeForm characterInput) {
-    String name = characterInput.getName();
-    String job = characterInput.getJob();
-    String action = characterInput.getAction();
-
-    // 職業に応じてキャラクターをセッションに保存
-    switch (job) {
-      case BaseJob.WARRIOR:
-        Warrior warrior = new Warrior(name, action);
-        session.setAttribute(BaseJob.WARRIOR, warrior);
-        session.removeAttribute(BaseJob.WITCH);
-        session.removeAttribute(BaseJob.MARTIAL_ARTIST);
-        break;
-      case BaseJob.WITCH:
-        Witch witch = new Witch(name, action);
-        session.setAttribute(BaseJob.WITCH, witch);
-        session.removeAttribute(BaseJob.WARRIOR);
-        session.removeAttribute(BaseJob.MARTIAL_ARTIST);
-        break;
-      case BaseJob.MARTIAL_ARTIST:
-        MartialArtist martialArtist = new MartialArtist(name, action);
-        session.setAttribute(BaseJob.MARTIAL_ARTIST, martialArtist);
-        session.removeAttribute(BaseJob.WARRIOR);
-        session.removeAttribute(BaseJob.WITCH);
-        break;
-    }
+    // パーティーに追加＋セッション保存
+    addMemberAndSaveSession(characterInput.getName(), characterInput.getJob());
 
     return new ModelAndView("redirect:/command"); // リダイレクト
   }
 
+  @RequestMapping(value = "/command", params = "repeat", method = RequestMethod.POST)
+  public ModelAndView reMakedCharacter(ModelAndView mav, CharacterMakeForm characterInput) {
+    // パーティーに追加＋セッション保存
+    addMemberAndSaveSession(characterInput.getName(), characterInput.getJob());
+
+    return new ModelAndView("redirect:/charactermake"); // リダイレクト
+  }
+
+  private void addMemberAndSaveSession(String name, String job) {
+    Party party = (Party) session.getAttribute(Party.PARTY_SESSION_KEY);
+    if (party == null) {
+      party = new Party();
+    }
+    // パーティーに追加
+    party.addMember(name, job);
+
+    session.setAttribute(Party.PARTY_SESSION_KEY, party);
+  }
 }

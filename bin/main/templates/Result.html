@@ -5,6 +5,8 @@
 <title>結果画面</title>
 </head>
 <body>
-	<p th:text="${result.resultString}">
+	<th:object th:each="entry : ${result.resultList}">
+		<p th:text="${entry}"></p>
+	</th:object>
 </body>
 </html>

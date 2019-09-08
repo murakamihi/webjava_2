@@ -5,6 +5,8 @@ public class CharacterMakeForm {
   String name;
   String action;
 
+  public Boolean isDisplayContinued = true;
+
   public CharacterMakeForm() {
     // 初期値は戦士とする
     job = BaseJob.WARRIOR;
